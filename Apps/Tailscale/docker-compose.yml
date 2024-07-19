@@ -1,0 +1,74 @@
+name: tailscaled
+services:
+  tailscaled:
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    cpu_shares: 90
+    command: []
+    container_name: tailscaled
+    deploy:
+      resources:
+        limits:
+          memory: 8052M
+        reservations:
+          memory: "33554432"
+    environment:
+      - TS_AUTHKEY=tskey-
+      - TS_EXTRA_ARGS=--advertise-exit-node
+      - TS_HOSTNAME=CasaOS-1
+      - TS_ROUTES=10.0.0.0/24
+      - TS_STATE_DIR=/var/lib/tailscale
+    hostname: tailscaled
+    image: tailscale/tailscale:latest
+    labels:
+      icon: https://cdn.jsdelivr.net/gh/Cp0204/CasaOS-AppStore-Play@main/Apps/Tailscale/icon.png
+    restart: unless-stopped
+    volumes:
+      - type: bind
+        source: /dev/net/tun
+        target: /dev/net/tun
+      - type: bind
+        source: /DATA/AppData/tailscaled/config
+        target: /var/lib/tailscale
+    ports: []
+    devices: []
+    networks:
+      - tailscaled
+    privileged: false
+networks:
+  tailscaled:
+    name: tailscaled
+x-casaos:
+  architectures:
+    - amd64
+    - arm
+    - arm64
+  author: helmpupper
+  category: VPN
+  description:
+    en_us: Tailscale is a zero config VPN for building secure networks. Install on
+      any device in minutes. Remote access from any network or physical
+      location.
+    zh_cn: Tailscale 是一款用于构建安全网络的零配置 VPN。只需几分钟即可在任何设备上安装，即可从任何网络或物理位置远程访问。
+  developer: tailscale
+  hostname: ""
+  icon: https://cdn.jsdelivr.net/gh/Cp0204/CasaOS-AppStore-Play@main/Apps/Tailscale/icon.png
+  index: /
+  is_uncontrolled: false
+  main: tailscaled
+  port_map: ""
+  scheme: http
+  store_app_id: tailscaled
+  tagline:
+    en_us: A VPN Service for Secure Networks.
+    zh_cn: 一个 VPN 服务，为安全网络提供保护。
+  thumbnail: null
+  tips:
+    before_install:
+      en_us: After installation, view the authentication url in the `App
+        Settings-Logs`.
+      zh_cn: 安装完成后，请在`应用设置-日志`中查看认证链接。
+  title:
+    custom: ""
+    en_us: Tailscaled
